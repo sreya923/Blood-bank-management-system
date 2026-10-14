@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | LifeDrop Blood Bank</title>
+
+    <style>
+        /* GENERAL RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #fff5f6;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR - SAME AS RECIPIENT PAGE */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* LOGIN PAGE CONTAINER */
+        .page-container {
+            min-height: 100vh;
+            padding: 120px 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* LOGIN CARD */
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 30px 32px;
+            background: white;
+            border: 1px solid #ffe0e5;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(181, 18, 43, 0.12);
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: #b5122b;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #e63950;
+            box-shadow: 0 0 0 3px rgba(230, 57, 80, 0.12);
+        }
+
+        /* LOGIN BUTTON */
+        .login-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: linear-gradient(90deg, #b5122b, #e63950);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(181, 18, 43, 0.25);
+        }
+
+        /* REGISTER LINK */
+        .register-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .register-link a {
+            color: #b5122b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* POPUP MESSAGE */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            max-width: calc(100% - 40px);
+            padding: 14px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: #218838;
+        }
+
+        .toast.error {
+            background: #c82333;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #292929;
+            color: white;
+            padding: 22px 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+        }
+
+        .footer-links a:hover {
+            color: #ff7585;
+        }
+
+        .footer p {
+            color: #ccc;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* RESPONSIVE NAVBAR */
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .page-container {
+                padding-top: 140px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .page-container {
+                padding: 120px 15px 30px;
+            }
+
+            .login-card {
+                padding: 25px 20px;
+            }
+
+            .login-card h1 {
+                font-size: 27px;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                max-width: none;
+                text-align: center;
+            }
+
+            .footer-links a {
+                display: inline-block;
+                margin: 5px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR - SAME AS RECIPIENT PAGE -->
+    <nav class="navbar">
+
+        <a href="home.html" class="logo">LifeDrop</a>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="navLinks">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="bloodstock.html">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html">Recipient</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html" class="active" aria-current="page">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- LOGIN FORM -->
+    <main class="page-container">
+
+        <section class="login-card">
+
+            <h1>Login</h1>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your registered email"
+                        autocomplete="username"
+                        maxlength="100"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+                </div>
+
+                <button type="submit" class="login-button">
+                    Login
+                </button>
+
+            </form>
+
+            <p class="register-link">
+                Don't have an account?
+                <a href="register.html">Register here</a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="bloodstock.html">Blood Stock</a>
+        </div>
+
+        <p>
+            &copy; <span id="currentYear"></span>
+            LifeDrop Blood Bank Management System. All rights reserved.
+        </p>
+
+    </footer>
+
+    <!-- POPUP MESSAGE -->
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite">
+    </div>
+
+    <script>
+        // Update footer year
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+        // Responsive navbar
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        menuButton.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", String(isOpen));
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+
+            menuButton.innerHTML = isOpen ? "&times;" : "&#9776;";
+        });
+
+        // Close menu after clicking a navigation link
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("show");
+
+                menuButton.setAttribute("aria-expanded", "false");
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
+
+                menuButton.innerHTML = "&#9776;";
+            });
+        });
+
+        // Toast notification
+        const loginForm = document.getElementById("loginForm");
+        const toast = document.getElementById("toast");
+
+        let toastTimer;
+
+        function showToast(message, type) {
+            clearTimeout(toastTimer);
+
+            toast.textContent = message;
+            toast.className = "toast " + type + " show";
+
+            toastTimer = setTimeout(function () {
+                toast.classList.remove("show");
+            }, 3500);
+        }
+
+        // Login form submission
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email")
+                .value.trim().toLowerCase();
+
+            const password = document.getElementById("password").value;
+
+            if (!email || !password) {
+                showToast(
+                    "Please enter your email and password.",
+                    "error"
+                );
+                return;
+            }
+
+            /*
+              This page currently contains the frontend only.
+              Real login authentication requires a backend.
+            */
+            showToast(
+                "Login is not connected yet. Please connect the backend to authenticate users.",
+                "error"
+            );
+        });
+    </script>
+
+</body>
+</html>

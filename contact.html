@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Us - LifeDrop</title>
+
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff5f6;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navbar - Same as Recipient Page */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Contact Container */
+        .contact-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 125px auto 35px;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(181, 18, 43, 0.12);
+        }
+
+        .contact-container h1 {
+            text-align: center;
+            color: #b5122b;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Contact Details */
+        .contact-details {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 15px 10px;
+            background: #fff5f6;
+            border-radius: 8px;
+        }
+
+        .detail {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .detail h3 {
+            color: #b5122b;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .detail p {
+            color: #555;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Contact Form */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #e63950;
+            box-shadow: 0 0 4px rgba(230, 57, 80, 0.2);
+        }
+
+        .form-group textarea {
+            height: 85px;
+            resize: vertical;
+        }
+
+        /* Submit Button */
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(90deg, #b5122b, #e63950);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .submit-button:hover {
+            background: #960d22;
+        }
+
+        .submit-button:active {
+            transform: scale(0.99);
+        }
+
+        /* Success/Error Notification */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #228b50;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 7px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 2000;
+            max-width: calc(100% - 40px);
+            font-size: 14px;
+        }
+
+        /* Responsive Navbar */
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .contact-container {
+                margin-top: 115px;
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .contact-container {
+                width: 92%;
+                padding: 18px;
+                margin-top: 105px;
+            }
+
+            .contact-container h1 {
+                font-size: 27px;
+            }
+
+            .contact-details {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                text-align: center;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar - Same Design as Recipient Page -->
+    <nav class="navbar">
+        <div class="logo">LifeDrop</div>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="navLinks"
+            type="button">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="bloodstock.html">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html">Recipient</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html" class="active" aria-current="page">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contact Form -->
+    <main class="contact-container">
+
+        <h1>Contact Us</h1>
+
+        <p class="description">
+            Have a question about our services? Send us a message.
+        </p>
+
+        <!-- Contact Details -->
+        <div class="contact-details">
+
+            <div class="detail">
+                <h3>Email</h3>
+                <p>support@lifedrop.com</p>
+            </div>
+
+            <div class="detail">
+                <h3>Phone</h3>
+                <p>+91 98765 43210</p>
+            </div>
+
+            <div class="detail">
+                <h3>Location</h3>
+                <p>India</p>
+            </div>
+
+        </div>
+
+        <!-- Contact Form -->
+        <form id="contactForm">
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    placeholder="Enter the subject"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Write your message here..."
+                    required></textarea>
+            </div>
+
+            <button type="submit" class="submit-button">
+                Send Message
+            </button>
+
+        </form>
+
+    </main>
+
+    <!-- Notification -->
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite">
+    </div>
+
+    <script>
+        // Responsive navbar
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        menuButton.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", String(isOpen));
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+
+            menuButton.innerHTML = isOpen ? "&times;" : "&#9776;";
+        });
+
+        // Close mobile menu after selecting a link
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("show");
+                menuButton.setAttribute("aria-expanded", "false");
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
+                menuButton.innerHTML = "&#9776;";
+            });
+        });
+
+        // Toast notification
+        const contactForm = document.getElementById("contactForm");
+        const toast = document.getElementById("toast");
+        let toastTimer;
+
+        function showToast(message, success) {
+            toast.textContent = message;
+            toast.style.background = success ? "#228b50" : "#b5122b";
+            toast.style.display = "block";
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(function () {
+                toast.style.display = "none";
+            }, 3500);
+        }
+
+        // Submit contact form
+        contactForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!contactForm.checkValidity()) {
+                contactForm.reportValidity();
+                return;
+            }
+
+            const contactMessage = {
+                id: "MSG-" + Date.now(),
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                subject: document.getElementById("subject").value.trim(),
+                message: document.getElementById("message").value.trim(),
+                submittedAt: new Date().toISOString()
+            };
+
+            // Prevent empty spaces from being submitted
+            if (
+                !contactMessage.name ||
+                !contactMessage.email ||
+                !contactMessage.subject ||
+                !contactMessage.message
+            ) {
+                showToast("Please fill in all fields.", false);
+                return;
+            }
+
+            try {
+                const savedMessages = JSON.parse(
+                    localStorage.getItem("lifedropContactMessages") || "[]"
+                );
+
+                if (!Array.isArray(savedMessages)) {
+                    throw new Error("Invalid saved messages");
+                }
+
+                savedMessages.push(contactMessage);
+
+                localStorage.setItem(
+                    "lifedropContactMessages",
+                    JSON.stringify(savedMessages)
+                );
+
+                contactForm.reset();
+
+                showToast(
+                    "Your message has been submitted successfully!",
+                    true
+                );
+
+            } catch (error) {
+                console.error("Unable to save contact message:", error);
+
+                showToast(
+                    "Unable to save your message. Please try again.",
+                    false
+                );
+            }
+        });
+    </script>
+
+</body>
+</html>

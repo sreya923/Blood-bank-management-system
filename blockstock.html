@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LifeDrop - Blood Stock Availability</title>
+
+    <style>
+        /* GENERAL */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            background: #fff7f8;
+            color: #292929;
+            min-height: 100vh;
+        }
+
+        /* NAVIGATION BAR - SAME AS HOME PAGE */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        /* NO WHITE BACKGROUND ON HOVER OR ACTIVE LINK */
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            max-width: 1200px;
+            margin: 125px auto 70px;
+            padding: 0 25px;
+        }
+
+        /* PAGE HEADING */
+
+        .page-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-heading .small-title {
+            color: #c21832;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .page-heading h1 {
+            font-size: 40px;
+            line-height: 1.3;
+            color: #292929;
+            margin-bottom: 15px;
+        }
+
+        .page-heading h1 span {
+            color: #c21832;
+        }
+
+        .page-heading p {
+            max-width: 720px;
+            margin: 0 auto;
+            color: #777;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* SUMMARY CARDS */
+
+        .stock-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #f1dfe2;
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 5px 20px rgba(70, 0, 15, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(70, 0, 15, 0.1);
+        }
+
+        .blood-type {
+            font-size: 28px;
+            font-weight: bold;
+            color: #c21832;
+            margin-bottom: 12px;
+        }
+
+        .blood-units {
+            font-size: 35px;
+            font-weight: bold;
+            color: #292929;
+            margin-bottom: 8px;
+        }
+
+        .summary-card p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* STOCK TABLE CONTAINER */
+
+        .stock-container {
+            background: white;
+            border: 1px solid #f1dfe2;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(80, 0, 15, 0.06);
+        }
+
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .stock-header h2 {
+            font-size: 25px;
+            color: #292929;
+        }
+
+        .stock-header h2 span {
+            color: #c21832;
+        }
+
+        .stock-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .stock-controls input,
+        .stock-controls select {
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+            min-width: 180px;
+        }
+
+        .stock-controls input:focus,
+        .stock-controls select:focus {
+            border-color: #e63950;
+            box-shadow: 0 0 0 3px rgba(230, 57, 80, 0.1);
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .stock-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .stock-table thead {
+            background: #fff0f2;
+        }
+
+        .stock-table th {
+            padding: 17px 18px;
+            text-align: left;
+            color: #a9152c;
+            font-size: 14px;
+            border-bottom: 1px solid #f0d9de;
+        }
+
+        .stock-table td {
+            padding: 18px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .stock-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .stock-table tbody tr:hover {
+            background: #fff9fa;
+        }
+
+        .stock-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .group-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #c21832;
+        }
+
+        /* STATUS LABELS */
+
+        .status {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .status.available {
+            background: #e2f5e8;
+            color: #218838;
+        }
+
+        .status.low {
+            background: #fff0d5;
+            color: #986000;
+        }
+
+        .status.out {
+            background: #ffe1e5;
+            color: #b5122b;
+        }
+
+        /* NO RESULTS */
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 15px;
+        }
+
+        /* LAST UPDATED */
+
+        .last-updated {
+            margin-top: 20px;
+            text-align: right;
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* FOOTER - SAME STYLE AS HOME PAGE */
+
+        .footer {
+            background: #211d1e;
+            color: white;
+            padding: 45px 8% 20px;
+            margin-top: 60px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 35px;
+            padding-bottom: 30px;
+        }
+
+        .footer-logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: #ff8293;
+        }
+
+        .footer-description {
+            color: #ccc;
+            max-width: 300px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .footer h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff8293;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #494143;
+            padding-top: 20px;
+            text-align: center;
+            color: #bbb;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .stock-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .stock-header {
+                align-items: flex-start;
+            }
+
+            .stock-controls {
+                width: 100%;
+            }
+
+            .stock-controls input,
+            .stock-controls select {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+                background: transparent;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                background: transparent;
+                color: #ffe0e5;
+            }
+
+            .main {
+                margin-top: 115px;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .stock-container {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .main {
+                padding: 0 14px;
+                margin-top: 100px;
+            }
+
+            .page-heading h1 {
+                font-size: 29px;
+            }
+
+            .page-heading p {
+                font-size: 14px;
+            }
+
+            .stock-summary {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .summary-card {
+                padding: 20px 12px;
+            }
+
+            .blood-type {
+                font-size: 24px;
+            }
+
+            .blood-units {
+                font-size: 29px;
+            }
+
+            .stock-container {
+                padding: 17px 12px;
+            }
+
+            .stock-header h2 {
+                font-size: 21px;
+            }
+
+            .stock-controls {
+                flex-direction: column;
+            }
+
+            .stock-controls input,
+            .stock-controls select {
+                width: 100%;
+            }
+
+            .last-updated {
+                text-align: left;
+                line-height: 1.6;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            LifeDrop
+        </div>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            type="button">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="bloodstock.html" class="active">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html">Recipient</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- PAGE HEADING -->
+
+        <section class="page-heading">
+
+            <div class="small-title">
+                BLOOD AVAILABILITY
+            </div>
+
+            <h1>
+                Blood Stock <span>Availability</span>
+            </h1>
+
+            <p>
+                Check the available blood groups and their current
+                sample quantities. Please confirm actual availability
+                with the blood bank before making arrangements.
+            </p>
+
+        </section>
+
+        <!-- SUMMARY CARDS -->
+
+        <section class="stock-summary">
+
+            <div class="summary-card">
+                <div class="blood-type">A+</div>
+                <div class="blood-units">25</div>
+                <p>Units available</p>
+            </div>
+
+            <div class="summary-card">
+                <div class="blood-type">B+</div>
+                <div class="blood-units">18</div>
+                <p>Units available</p>
+            </div>
+
+            <div class="summary-card">
+                <div class="blood-type">O+</div>
+                <div class="blood-units">32</div>
+                <p>Units available</p>
+            </div>
+
+            <div class="summary-card">
+                <div class="blood-type">AB+</div>
+                <div class="blood-units">12</div>
+                <p>Units available</p>
+            </div>
+
+        </section>
+
+        <!-- STOCK TABLE -->
+
+        <section class="stock-container">
+
+            <div class="stock-header">
+
+                <h2>
+                    Available <span>Blood Groups</span>
+                </h2>
+
+                <div class="stock-controls">
+
+                    <input
+                        type="search"
+                        id="searchBlood"
+                        placeholder="Search blood group..."
+                        aria-label="Search blood group">
+
+                    <select id="statusFilter" aria-label="Filter by stock status">
+                        <option value="all">All statuses</option>
+                        <option value="available">Available</option>
+                        <option value="low">Low Stock</option>
+                        <option value="out">Out of Stock</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="stock-table">
+
+                    <thead>
+                        <tr>
+                            <th>Blood Group</th>
+                            <th>Units Available</th>
+                            <th>Stock Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="stockTableBody">
+
+                        <tr data-status="available">
+                            <td class="group-name">A+</td>
+                            <td>25 units</td>
+                            <td><span class="status available">Available</span></td>
+                        </tr>
+
+                        <tr data-status="low">
+                            <td class="group-name">A-</td>
+                            <td>4 units</td>
+                            <td><span class="status low">Low Stock</span></td>
+                        </tr>
+
+                        <tr data-status="available">
+                            <td class="group-name">B+</td>
+                            <td>18 units</td>
+                            <td><span class="status available">Available</span></td>
+                        </tr>
+
+                        <tr data-status="low">
+                            <td class="group-name">B-</td>
+                            <td>3 units</td>
+                            <td><span class="status low">Low Stock</span></td>
+                        </tr>
+
+                        <tr data-status="available">
+                            <td class="group-name">AB+</td>
+                            <td>12 units</td>
+                            <td><span class="status available">Available</span></td>
+                        </tr>
+
+                        <tr data-status="out">
+                            <td class="group-name">AB-</td>
+                            <td>0 units</td>
+                            <td><span class="status out">Out of Stock</span></td>
+                        </tr>
+
+                        <tr data-status="available">
+                            <td class="group-name">O+</td>
+                            <td>32 units</td>
+                            <td><span class="status available">Available</span></td>
+                        </tr>
+
+                        <tr data-status="low">
+                            <td class="group-name">O-</td>
+                            <td>2 units</td>
+                            <td><span class="status low">Low Stock</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+                <div class="no-results" id="noResults">
+                    No blood groups match your search.
+                </div>
+
+            </div>
+
+            <div class="last-updated">
+                Demonstration stock values | Last updated:
+                <span id="lastUpdated"></span>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="footer-top">
+
+            <div>
+                <div class="footer-logo">
+                    Life<span>Drop</span>
+                </div>
+
+                <p class="footer-description">
+                    A Blood Bank Management System designed to connect
+                    donors and recipients and promote awareness about
+                    blood donation.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="donors.html">Donors</a>
+                    <a href="requests.html">Requests</a>
+                    <a href="bloodstock.html">Blood Stock</a>
+                </div>
+            </div>
+
+            <div>
+                <h3>Explore</h3>
+
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                Copyright &copy; <span id="currentYear"></span>
+                LifeDrop Blood Bank Management System.
+            </p>
+        </div>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        // Mobile navigation menu: same behavior as home page
+
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        menuButton.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", isOpen);
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );

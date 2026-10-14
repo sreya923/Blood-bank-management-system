@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LifeDrop - Blood Bank Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            background: #fff7f8;
+            color: #292929;
+        }
+
+        /* NAVIGATION BAR */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        /* NAVBAR HOVER: NO WHITE BACKGROUND */
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* HERO SECTION */
+
+        .hero {
+            min-height: 680px;
+            padding: 150px 9% 80px;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(65, 0, 14, 0.88),
+                    rgba(135, 5, 30, 0.60),
+                    rgba(50, 0, 10, 0.25)
+                ),
+                url("https://fiinovation.co.in/wp-content/uploads/2022/06/Blood-Donation-%E2%80%93-India-Needs-A-Perception-Change.jpg")
+                center/cover no-repeat;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 65px;
+            line-height: 1.2;
+            margin-bottom: 28px;
+            color: white;
+        }
+
+        .hero h1 span {
+            color: #ffabb8;
+        }
+
+        .hero p {
+            font-size: 20px;
+            line-height: 1.9;
+            color: #fff0f2;
+        }
+
+        /* BENEFITS SECTION */
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            padding: 35px 8%;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .benefit h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .benefit p {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* GENERAL SECTION */
+
+        .section {
+            padding: 85px 8%;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 45px;
+        }
+
+        .section-heading .small-title {
+            color: #c21832;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .section-heading h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .section-heading h2 span {
+            color: #c21832;
+        }
+
+        .section-heading p {
+            color: #777;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* SERVICE CARDS */
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 25px;
+            align-items: stretch;
+        }
+
+        .card {
+            background: white;
+            padding: 35px 28px;
+            border-radius: 15px;
+            border: 1px solid #f1dfe2;
+            box-shadow: 0 5px 20px rgba(70, 0, 15, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(70, 0, 15, 0.12);
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 17px;
+            line-height: 1.4;
+        }
+
+        .card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #777;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card a {
+            display: inline-block;
+            text-decoration: none;
+            color: #c21832;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: auto;
+        }
+
+        .card a:hover {
+            color: #8f1025;
+            text-decoration: underline;
+        }
+
+        /* WHY DONATE SECTION */
+
+        .why-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 75px 8%;
+            background: #fff0f2;
+        }
+
+        .why-image {
+            min-height: 380px;
+            border-radius: 15px;
+            background:
+                linear-gradient(
+                    rgba(130, 0, 25, 0.18),
+                    rgba(130, 0, 25, 0.18)
+                ),
+                url("https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1000&q=85")
+                center/cover no-repeat;
+        }
+
+        .why-content .small-title {
+            color: #c21832;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .why-content h2 {
+            font-size: 38px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .why-content p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* CALL TO ACTION */
+
+        .cta {
+            text-align: center;
+            padding: 75px 8%;
+            color: white;
+            background: linear-gradient(110deg, #a90f29, #e63950);
+        }
+
+        .cta h2 {
+            font-size: 38px;
+            margin-bottom: 18px;
+        }
+
+        .cta p {
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.8;
+            color: #ffe7ea;
+            font-size: 16px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #211d1e;
+            color: white;
+            padding: 45px 8% 20px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 35px;
+            padding-bottom: 30px;
+        }
+
+        .footer-logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: #ff8293;
+        }
+
+        .footer-description {
+            color: #ccc;
+            max-width: 300px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .footer h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff8293;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #494143;
+            padding-top: 20px;
+            text-align: center;
+            color: #bbb;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+
+            .services {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+                background: transparent;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                background: transparent;
+                color: #ffe0e5;
+            }
+
+            .hero {
+                min-height: 580px;
+                padding: 140px 7% 70px;
+            }
+
+            .hero h1 {
+                font-size: 45px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .benefit {
+                justify-content: center;
+            }
+
+            .why-section {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .why-image {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .section-heading h2,
+            .why-content h2,
+            .cta h2 {
+                font-size: 29px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                min-height: auto;
+                padding: 30px 24px;
+            }
+
+            .section {
+                padding: 60px 6%;
+            }
+
+            .why-section {
+                padding: 60px 6%;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            LifeDrop
+        </div>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            type="button">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html" class="active">Home</a></li>
+            <li><a href="bloodstock.html">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html">Recipient</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- HERO SECTION -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Give Blood.<br>
+                <span>Give Someone Hope.</span>
+            </h1>
+
+            <p>
+                Welcome to LifeDrop Blood Bank Management System.<br>
+                Connecting blood donors with people who need blood.<br>
+                Together, we can make a difference and save lives.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- BENEFITS SECTION -->
+
+    <section class="benefits">
+
+        <div class="benefit">
+            <div>
+                <h3>Safe and Secure</h3>
+                <p>Your information deserves protection.</p>
+            </div>
+        </div>
+
+        <div class="benefit">
+            <div>
+                <h3>Every Drop Matters</h3>
+                <p>Your donation can help save lives.</p>
+            </div>
+        </div>
+
+        <div class="benefit">
+            <div>
+                <h3>Community Support</h3>
+                <p>People helping people in need.</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- SERVICES SECTION -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="small-title">
+                OUR SERVICES
+            </div>
+
+            <h2>
+                One Platform.<br>
+                <span>Many Lives Saved.</span>
+            </h2>
+
+            <p>
+                Explore the services available in our Blood Bank
+                Management System.
+            </p>
+
+        </div>
+
+        <div class="services">
+
+            <div class="card">
+                <h3>Donor Registration</h3>
+
+                <p>
+                    Register your details and join the donor
+                    community to help people who may need blood.
+                </p>
+
+                <a href="donor.html">Register as donor &rarr;</a>
+            </div>
+
+            <div class="card">
+                <h3>Request Blood</h3>
+
+                <p>
+                    Submit a blood request with the required
+                    blood group and contact details.
+                </p>
+
+                <a href="recipient.html">Request blood &rarr;</a>
+            </div>
+
+            <div class="card">
+                <h3>Blood Stock</h3>
+
+                <p>
+                    Explore blood groups and their sample
+                    availability through the stock page.
+                </p>
+
+                <a href="blood%20stock.html">Check availability &rarr;</a>
+            </div>
+
+            <div class="card">
+                <h3>Donor Directory</h3>
+
+                <p>
+                    View donor registrations saved in this
+                    browser demonstration.
+                </p>
+
+                <a href="donors.html">View donor list &rarr;</a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY DONATE SECTION -->
+
+    <section class="why-section">
+
+        <div
+            class="why-image"
+            role="img"
+            aria-label="Healthcare setting">
+        </div>
+
+        <div class="why-content">
+
+            <div class="small-title">
+                WHY DONATE BLOOD?
+            </div>
+
+            <h2>
+                Your Donation Can<br>
+                Make a Difference.
+            </h2>
+
+            <p>
+                Blood is essential for many medical treatments,
+                surgeries and emergencies. Voluntary blood donation
+                helps hospitals support patients when blood is needed.
+            </p>
+
+            <p>
+                By joining a donor community, you can help increase
+                awareness and make it easier for people to connect
+                with potential donors.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- CALL TO ACTION -->
+
+    <section class="cta">
+
+        <h2>Be Someone's Reason to Smile.</h2>
+
+        <p>
+            A small act of kindness can make a big difference.
+            Together, we can build a community that cares about
+            people in need.
+        </p>
+
+    </section>
+
+    
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        // Mobile navigation menu
+
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        menuButton.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", isOpen);
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+        });
+
+        // Close mobile menu after selecting a link
+
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("show");
+
+                menuButton.setAttribute("aria-expanded", "false");
+                menuButton.setAttribute("aria-label", "Open navigation menu");
+            });
+        });
+
+        // Automatically display the current year
+
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+
+</html>

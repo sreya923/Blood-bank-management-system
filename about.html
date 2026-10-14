@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us - LifeDrop</title>
+
+    <style>
+        /* GENERAL */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            background: #fff7f8;
+            color: #292929;
+            min-height: 100vh;
+        }
+
+        /* NAVIGATION BAR - SAME AS RECIPIENT PAGE */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        /* NO WHITE BACKGROUND ON HOVER OR ACTIVE LINK */
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* ABOUT SECTION */
+
+        .about-container {
+            max-width: 850px;
+            margin: 160px auto 100px;
+            padding: 45px 30px;
+            background: white;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(181, 18, 43, 0.12);
+            border: 1px solid #f1dfe2;
+        }
+
+        .about-container h1 {
+            color: #b5122b;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .about-container p {
+            color: #555;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        /* FOOTER - SAME STYLE AS RECIPIENT PAGE */
+
+        .footer {
+            margin-top: 70px;
+            background: #211d1e;
+            color: white;
+            padding: 45px 8% 20px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 35px;
+            padding-bottom: 30px;
+        }
+
+        .footer-logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: #ff8293;
+        }
+
+        .footer-description {
+            color: #ccc;
+            max-width: 300px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .footer h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff8293;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #494143;
+            padding-top: 20px;
+            text-align: center;
+            color: #bbb;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE NAVBAR - SAME BREAKPOINTS AS RECIPIENT PAGE */
+
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                background: transparent;
+                color: #ffe0e5;
+            }
+
+            .about-container {
+                margin: 130px 20px 60px;
+                padding: 30px 20px;
+            }
+
+            .about-container h1 {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .about-container {
+                margin: 120px 15px 40px;
+                padding: 25px 18px;
+            }
+
+            .about-container h1 {
+                font-size: 27px;
+            }
+
+            .about-container p {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR - SAME AS RECIPIENT PAGE -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            LifeDrop
+        </div>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-expanded="false">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="bloodstock.html">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html">Recipient</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- ABOUT CONTENT -->
+
+    <main>
+
+        <section class="about-container">
+
+            <h1>About LifeDrop</h1>
+
+            <p>
+                LifeDrop is a Blood Bank Management System designed to connect
+                blood donors with people who need blood. Our website allows users
+                to register as donors, submit blood requests, and view blood stock
+                information. Our goal is to make blood donation information easier
+                to access and encourage people to help save lives through blood
+                donation.
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER - SAME STYLE AS RECIPIENT PAGE -->
+
+    <footer class="footer">
+
+        <div class="footer-top">
+
+            <div>
+                <div class="footer-logo">
+                    Life<span>Drop</span>
+                </div>
+
+                <p class="footer-description">
+                    A Blood Bank Management System designed to connect
+                    donors and recipients and promote awareness about
+                    blood donation.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="donor.html">Donor</a>
+                    <a href="recipient.html">Recipient</a>
+                    <a href="bloodstock.html">Blood Stock</a>
+                </div>
+            </div>
+
+            <div>
+                <h3>Explore</h3>
+
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                Copyright &copy; <span id="currentYear"></span>
+                LifeDrop Blood Bank Management System.
+            </p>
+        </div>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        /* MOBILE NAVIGATION - SAME AS RECIPIENT PAGE */
+
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        menuButton.addEventListener("click", function () {
+
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", isOpen);
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+
+        });
+
+        /* CLOSE MOBILE MENU AFTER CLICKING A LINK */
+
+        navLinks.querySelectorAll("a").forEach(function (link) {
+
+            link.addEventListener("click", function () {
+
+                navLinks.classList.remove("show");
+
+                menuButton.setAttribute("aria-expanded", "false");
+
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
+
+            });
+
+        });
+
+        /* DISPLAY CURRENT YEAR */
+
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+
+</html>

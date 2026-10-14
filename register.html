@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | LifeDrop Blood Bank</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #fff5f6;
+            color: #333;
+        }
+
+        /* NAVBAR - SAME AS LOGIN PAGE */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* REGISTER CONTAINER */
+
+        .page-container {
+            min-height: 100vh;
+            padding: 120px 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 450px;
+            padding: 30px 32px;
+            background: white;
+            border: 1px solid #ffe0e5;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(181, 18, 43, 0.12);
+        }
+
+        .register-card h1 {
+            text-align: center;
+            color: #b5122b;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #e63950;
+            box-shadow: 0 0 0 3px rgba(230, 57, 80, 0.12);
+        }
+
+        /* REGISTER BUTTON */
+
+        .register-button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 7px;
+            background: linear-gradient(90deg, #b5122b, #e63950);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(181, 18, 43, 0.25);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #b5122b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* POPUP MESSAGE */
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            max-width: calc(100% - 40px);
+            padding: 14px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: #218838;
+        }
+
+        .toast.error {
+            background: #c82333;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #292929;
+            color: white;
+            padding: 22px 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+        }
+
+        .footer-links a:hover {
+            color: #ff7585;
+        }
+
+        .footer p {
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        /* TABLET AND SMALL LAPTOP */
+
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+        }
+
+        /* MOBILE NAVBAR */
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 18px 25px;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                padding-top: 15px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                background: transparent;
+                color: #ffe0e5;
+            }
+
+            .page-container {
+                padding-top: 110px;
+            }
+        }
+
+        /* SMALL MOBILE SCREENS */
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .page-container {
+                padding: 100px 15px 30px;
+            }
+
+            .register-card {
+                padding: 25px 20px;
+            }
+
+            .register-card h1 {
+                font-size: 25px;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                max-width: none;
+                text-align: center;
+            }
+
+            .footer-links a {
+                display: inline-block;
+                margin: 6px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .logo {
+                font-size: 24px;
+            }
+
+            .menu-button {
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR - SAME AS LOGIN PAGE -->
+
+    <nav class="navbar">
+        <a href="home.html" class="logo">LifeDrop</a>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="navLinks">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="bloodstock.html">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html">Recipient</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li>
+                <a href="register.html" class="active" aria-current="page">
+                    Register
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- REGISTER FORM -->
+
+    <main class="page-container">
+
+        <section class="register-card">
+
+            <h1>Register</h1>
+
+            <form id="registerForm">
+
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Enter your full name"
+                        minlength="2"
+                        maxlength="80"
+                        autocomplete="name"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        maxlength="100"
+                        autocomplete="email"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter 10-digit mobile number"
+                        pattern="[6-9][0-9]{9}"
+                        maxlength="10"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Re-enter your password"
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required>
+                </div>
+
+                <button type="submit" class="register-button">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p class="login-link">
+                Already have an account?
+                <a href="login.html">Login here</a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="footer-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="bloodstock.html">Blood Stock</a>
+        </div>
+
+        <p>
+            &copy; <span id="currentYear"></span>
+            LifeDrop Blood Bank Management System. All rights reserved.
+        </p>
+
+    </footer>
+
+    <!-- POPUP MESSAGE -->
+
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite">
+    </div>
+
+    <script>
+        const registerForm = document.getElementById("registerForm");
+        const toast = document.getElementById("toast");
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        let toastTimer;
+
+        // Display the current year in the footer
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+        // Mobile navbar toggle
+        menuButton.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", String(isOpen));
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+
+            menuButton.innerHTML = isOpen ? "&times;" : "&#9776;";
+        });
+
+        // Close mobile menu after selecting a link
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("show");
+
+                menuButton.setAttribute("aria-expanded", "false");
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
+
+                menuButton.innerHTML = "&#9776;";
+            });
+        });
+
+        // Display popup notification
+        function showToast(message, type) {
+            clearTimeout(toastTimer);
+
+            toast.textContent = message;
+            toast.className = "toast " + type + " show";
+
+            toastTimer = setTimeout(function () {
+                toast.classList.remove("show");
+            }, 3500);
+        }
+
+        // Registration form validation
+        registerForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const fullName =
+                document.getElementById("fullName").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim().toLowerCase();
+
+            const phone =
+                document.getElementById("phone").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            if (fullName.length < 2) {
+                showToast("Please enter your full name.", "error");
+                return;
+            }
+
+            if (!email) {
+                showToast("Please enter your email address.", "error");
+                return;
+            }
+
+            if (!/^[6-9][0-9]{9}$/.test(phone)) {
+                showToast(
+                    "Please enter a valid 10-digit Indian mobile number.",
+                    "error"
+                );
+                return;
+            }
+
+            if (password.length < 8) {
+                showToast(
+                    "Password must contain at least 8 characters.",
+                    "error"
+                );
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showToast(
+                    "Passwords do not match. Please try again.",
+                    "error"
+                );
+                return;
+            }
+
+            /*
+             * Frontend demonstration only.
+             * This does not create an account in MySQL.
+             */
+            showToast(
+                "Registration is not connected to the database yet.",
+                "error"
+            );
+        });
+    </script>
+
+</body>
+</html>

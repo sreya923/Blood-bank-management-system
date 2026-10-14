@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Recipient Registration - LifeDrop</title>
+
+    <style>
+        /* GENERAL */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            background: #fff7f8;
+            color: #292929;
+            min-height: 100vh;
+        }
+
+        /* NAVIGATION BAR - SAME AS HOME PAGE */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: linear-gradient(90deg, #b5122b, #e63950, #ff7585);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+            padding: 12px 13px;
+            border-radius: 7px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            background: transparent;
+        }
+
+        /* NO WHITE BACKGROUND ON HOVER OR ACTIVE LINK */
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: transparent;
+            color: #ffe0e5;
+        }
+
+        .menu-button {
+            display: none;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* MAIN FORM CONTAINER */
+
+        .main-container {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 100px 10px 0;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #f1dfe2;
+            box-shadow: 0 10px 35px rgba(70, 0, 15, 0.08);
+        }
+
+        /* FORM HEADING */
+
+        .form-heading {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1dfe2;
+        }
+
+        .form-heading h1 {
+            color: #b5122b;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* FORM GRID */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 9px;
+            color: #333;
+        }
+
+        .required {
+            color: #c21832;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            background: #fff;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #d92343;
+            box-shadow: 0 0 0 3px rgba(217, 35, 67, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #aaa;
+        }
+
+        /* SUBMIT BUTTON */
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #b5122b, #e63950);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+
+        .submit-button:hover {
+            box-shadow: 0 6px 18px rgba(181, 18, 43, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER - SAME STYLE AS HOME PAGE */
+
+        .footer {
+            margin-top: 70px;
+            background: #211d1e;
+            color: white;
+            padding: 45px 8% 20px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 35px;
+            padding-bottom: 30px;
+        }
+
+        .footer-logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: #ff8293;
+        }
+
+        .footer-description {
+            color: #ccc;
+            max-width: 300px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .footer h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff8293;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #494143;
+            padding-top: 20px;
+            text-align: center;
+            color: #bbb;
+            font-size: 13px;
+        }
+
+        /* BOTTOM POPUP MESSAGE */
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translate(-50%, 30px);
+            background: #198754;
+            color: white;
+            padding: 16px 25px;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            font-size: 15px;
+            text-align: center;
+            width: max-content;
+            max-width: calc(100% - 30px);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.35s;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+
+        .toast.error {
+            background: #c21832;
+        }
+
+        /* RESPONSIVE DESIGN - SAME NAVBAR BREAKPOINTS AS HOME */
+
+        @media (max-width: 1250px) {
+            .navbar {
+                padding: 18px 25px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 9px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 20px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px;
+                font-size: 15px;
+                background: transparent;
+            }
+
+            .nav-links a:hover,
+            .nav-links a.active {
+                background: transparent;
+                color: #ffe0e5;
+            }
+
+            .form-card {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 26px;
+            }
+
+            .main-container {
+                padding: 110px 14px 0;
+            }
+
+            .form-card {
+                padding: 23px 18px;
+            }
+
+            .form-heading h1 {
+                font-size: 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR - EXACT SAME AS HOME PAGE -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            LifeDrop
+        </div>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-expanded="false">
+            &#9776;
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="bloodstock.html">Blood Stock</a></li>
+            <li><a href="donor.html">Donor</a></li>
+            <li><a href="recipient.html" class="active">Recipient</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- RECIPIENT REGISTRATION FORM -->
+
+    <main class="main-container">
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                <h1>Recipient Registration</h1>
+            </div>
+
+            <form id="bloodRequestForm">
+
+                <div class="form-grid">
+
+                    <!-- PATIENT NAME -->
+
+                    <div class="form-group">
+                        <label for="patientName">
+                            Patient Name <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="patientName"
+                            name="patientName"
+                            placeholder="Enter patient name"
+                            minlength="2"
+                            maxlength="80"
+                            autocomplete="name"
+                            required>
+                    </div>
+
+                    <!-- PATIENT AGE -->
+
+                    <div class="form-group">
+                        <label for="age">
+                            Patient Age <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="age"
+                            name="age"
+                            placeholder="Enter patient age"
+                            min="0"
+                            max="120"
+                            step="1"
+                            required>
+                    </div>
+
+                    <!-- BLOOD GROUP -->
+
+                    <div class="form-group">
+                        <label for="bloodGroup">
+                            Blood Group <span class="required">*</span>
+                        </label>
+
+                        <select id="bloodGroup" name="bloodGroup" required>
+                            <option value="">Select blood group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
+                    <!-- UNITS REQUIRED -->
+
+                    <div class="form-group">
+                        <label for="units">
+                            Units Required <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="units"
+                            name="units"
+                            placeholder="Enter number of units"
+                            min="1"
+                            max="100"
+                            step="1"
+                            required>
+                    </div>
+
+                    <!-- HOSPITAL NAME -->
+
+                    <div class="form-group">
+                        <label for="hospital">
+                            Hospital Name <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="hospital"
+                            name="hospital"
+                            placeholder="Enter hospital name"
+                            minlength="2"
+                            maxlength="120"
+                            required>
+                    </div>
+
+                    <!-- CONTACT NUMBER -->
+
+                    <div class="form-group">
+                        <label for="phone">
+                            Contact Number <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter 10-digit mobile number"
+                            inputmode="numeric"
+                            pattern="[6-9][0-9]{9}"
+                            maxlength="10"
+                            title="Enter a valid 10-digit Indian mobile number"
+                            autocomplete="tel"
+                            required>
+                    </div>
+
+                    <!-- EMAIL ADDRESS -->
+
+                    <div class="form-group full-width">
+                        <label for="email">
+                            Email Address <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            maxlength="120"
+                            autocomplete="email"
+                            required>
+                    </div>
+
+                    <!-- HOSPITAL ADDRESS -->
+
+                    <div class="form-group full-width">
+                        <label for="address">
+                            Hospital Address / Location
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="address"
+                            name="address"
+                            placeholder="Enter hospital address or required location"
+                            maxlength="500"
+                            required></textarea>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Submit
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="footer-top">
+
+            <div>
+                <div class="footer-logo">
+                    Life<span>Drop</span>
+                </div>
+
+                <p class="footer-description">
+                    A Blood Bank Management System designed to connect
+                    donors and recipients and promote awareness about
+                    blood donation.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="donors.html">Donors</a>
+                    <a href="requests.html">Requests</a>
+                    <a href="bloodstock.html">Blood Stock</a>
+                </div>
+            </div>
+
+            <div>
+                <h3>Explore</h3>
+
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                Copyright &copy; <span id="currentYear"></span>
+                LifeDrop Blood Bank Management System.
+            </p>
+        </div>
+
+    </footer>
+
+    <!-- BOTTOM POPUP MESSAGE -->
+
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite">
+    </div>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        /* MOBILE NAVIGATION - SAME AS HOME PAGE */
+
+        const menuButton = document.getElementById("menuButton");
+        const navLinks = document.getElementById("navLinks");
+
+        menuButton.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("show");
+
+            menuButton.setAttribute("aria-expanded", isOpen);
+
+            menuButton.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+        });
+
+        /* CLOSE MOBILE MENU AFTER SELECTING A LINK */
+
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("show");
+
+                menuButton.setAttribute("aria-expanded", "false");
+
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
+            });
+        });
+
+        /* DISPLAY CURRENT YEAR */
+
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+        /* BOTTOM POPUP MESSAGE */
+
+        let toastTimer;
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById("toast");
+
+            toast.textContent = message;
+            toast.classList.toggle("error", isError);
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(function () {
+                toast.classList.remove("show");
+            }, 3500);
+        }
+
+        /* RECIPIENT REGISTRATION */
+
+        const bloodRequestForm =
+            document.getElementById("bloodRequestForm");
+
+        bloodRequestForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            if (!bloodRequestForm.checkValidity()) {
+                bloodRequestForm.reportValidity();
+                return;
+            }
+
+            const patientName =
+                document.getElementById("patientName").value.trim();
+
+            const age =
+                Number(document.getElementById("age").value);
+
+            const bloodGroup =
+                document.getElementById("bloodGroup").value;
+
+            const units =
+                Number(document.getElementById("units").value);
+
+            const hospital =
+                document.getElementById("hospital").value.trim();
+
+            const phone =
+                document.getElementById("phone").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim().toLowerCase();
+
+            const address =
+                document.getElementById("address").value.trim();
+
+            /* ADDITIONAL VALIDATION */
+
+            if (
+                !Number.isInteger(age) ||
+                age < 0 ||
+                age > 120
+            ) {
+                showToast(
+                    "Please enter a valid patient age between 0 and 120.",
+                    true
+                );
+                return;
+            }
+
+            if (
+                !Number.isInteger(units) ||
+                units < 1 ||
+                units > 100
+            ) {
+                showToast(
+                    "Please enter units between 1 and 100.",
+                    true
+                );
+                return;
+            }
+
+            if (!/^[6-9]\d{9}$/.test(phone)) {
+                showToast(
+                    "Please enter a valid 10-digit Indian mobile number.",
+                    true
+                );
+                return;
+            }
+
+            if (
+                !patientName ||
+                !bloodGroup ||
+                !hospital ||
+                !email ||
+                !address
+            ) {
+                showToast(
+                    "Please complete all required fields.",
+                    true
+                );
+                return;
+            }
+
+            /* CREATE REQUEST RECORD */
+
+            const request = {
+                id: "REQ-" + Date.now(),
+                patientName: patientName,
+                age: age,
+                bloodGroup: bloodGroup,
+                units: units,
+                hospital: hospital,
+                phone: phone,
+                email: email,
+                address: address,
+                status: "Pending",
+                submittedAt: new Date().toISOString()
+            };
+
+            /* SAVE REQUEST TO LOCAL STORAGE */
+
+            try {
+                const savedData =
+                    localStorage.getItem("lifedropRequests");
+
+                const savedRequests = savedData
+                    ? JSON.parse(savedData)
+                    : [];
+
+                if (!Array.isArray(savedRequests)) {
+                    throw new Error("Invalid saved request data");
+                }
+
+                savedRequests.push(request);
+
+                localStorage.setItem(
+                    "lifedropRequests",
+                    JSON.stringify(savedRequests)
+                );
+
+                bloodRequestForm.reset();
+
+                showToast(
+                    "Recipient registration successful! Your blood request has been submitted."
+                );
+
+            } catch (error) {
+                showToast(
+                    "Unable to save your details. Please check browser storage and try again.",
+                    true
+                );
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>
